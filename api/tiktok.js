@@ -2,8 +2,8 @@ import axios from "axios";
 
 // ===== Config =====
 const allowedOrigins = [
-  "https://snaptik.pics",
-  "https://www.snaptik.pics",
+  "https://snapsave.cfd",
+  "https://www.snapsave.cfd",
   "https://snapth.vercel.app",
   "http://localhost:3000"
 ];
