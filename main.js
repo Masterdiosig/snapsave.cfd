@@ -5,8 +5,8 @@ async function fetchVideo(url) {
     const response = await fetch("/api/tiktok", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + SECRET_TOKEN
+       'Content-Type': 'application/json',
+          'Authorization': 'Bearer my_super_secret_token_123'
       },
       body: JSON.stringify({ url })
     });
