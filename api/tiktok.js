@@ -43,6 +43,10 @@ export default async function handler(req, res) {
   }
 
   // 🔐 Token
+
+  console.log("🔑 token client gửi:", token);
+console.log("🔒 token server env:", secretToken);
+
   if (!token || token !== secretToken) {
     console.warn("⛔ Bị chặn: sai token:", token);
     return res.status(403).json({ error: "Forbidden - Invalid token" });
