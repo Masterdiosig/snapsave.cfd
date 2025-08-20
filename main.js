@@ -1,62 +1,68 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const input = document.getElementById("hf_urli");
-  const resultBox = document.getElementById("result");
+async function fetchVideo(url) {
+  try {
+    showLoading(true);
 
-  function showErrorInline(message) {
-    const box = document.getElementById("error-inline");
-    const msg = document.getElementById("error-inline-msg");
-    msg.textContent = message;
-    box.style.display = "block";
-    setTimeout(() => {
-      box.style.display = "none";
-    }, 4000);
+    const response = await fetch("/api/tiktok", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + SECRET_TOKEN
+      },
+      body: JSON.stringify({ url })
+    });
+
+    const result = await response.json();
+    showLoading(false);
+
+    if (result.code === 0 && result.data.length > 0) {
+      // ✅ Có link tải
+      renderResult(result.data, result.meta);
+    } else if (result.code === 2) {
+      // ⚠️ Fallback oEmbed: chỉ hiển thị thông tin
+      renderMetaOnly(result.meta);
+    } else {
+      showError(result.message || "Không tìm thấy video!");
+    }
+  } catch (err) {
+    console.error("❌ Fetch lỗi:", err);
+    showLoading(false);
+    showError("Lỗi kết nối tới máy chủ!");
   }
+}
 
-  document.getElementById("submit").addEventListener("click", async (e) => {
-    e.preventDefault();
-    const tiktokUrl = input.value.trim();
+// ✅ Render khi có link tải
+function renderResult(list, meta) {
+  const container = document.getElementById("result");
+  container.innerHTML = `
+    <div class="video-meta">
+      <img src="${meta.thumbnail || ""}" alt="Thumbnail"/>
+      <p><strong>${meta.author || "Ẩn danh"}</strong></p>
+      <p>${meta.description || ""}</p>
+    </div>
+    <div class="download-list">
+      ${list
+        .map(
+          (item) => `
+        <a href="/api/download?url=${encodeURIComponent(item.url)}" class="btn-download">
+          ${item.label}
+        </a>`
+        )
+        .join("")}
+    </div>
+  `;
+}
 
-    if (!tiktokUrl) {
-      showErrorInline("Vui lòng dán link TikTok!");
-      input.focus();
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/tiktok', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: tiktokUrl })
-      });
-
-      const data = await res.json();
-      resultBox.innerHTML = '';
-
-      if (data.code === 0 && data.data.length > 0) {
-        for (const item of data.data) {
-          const btn = document.createElement("button");
-          btn.textContent = item.label;
-          btn.onclick = async () => {
-            try {
-              const response = await fetch(`/api/download?url=${encodeURIComponent(item.url)}`);
-              const blob = await response.blob();
-              const a = document.createElement('a');
-              a.href = URL.createObjectURL(blob);
-              a.download = "tiktok.mp4";
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-            } catch (err) {
-              showErrorInline("Không tải được video.");
-            }
-          };
-          resultBox.appendChild(btn);
-        }
-      } else {
-        showErrorInline("Không tìm thấy video!");
-      }
-    } catch (error) {
-      showErrorInline("Lỗi kết nối tới máy chủ!");
-    }
-  });
-});
+// ✅ Render khi chỉ có meta (không có link tải)
+function renderMetaOnly(meta) {
+  const container = document.getElementById("result");
+  container.innerHTML = `
+    <div class="video-meta">
+      <img src="${meta.thumbnail || ""}" alt="Thumbnail"/>
+      <p><strong>${meta.author || "Ẩn danh"}</strong></p>
+      <p>${meta.description || ""}</p>
+    </div>
+    <div class="warning">
+      ❌ Không lấy được video để tải xuống, chỉ hiển thị thông tin.
+    </div>
+  `;
+}
