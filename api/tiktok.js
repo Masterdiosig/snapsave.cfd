@@ -17,8 +17,8 @@ const followRedirect = async (shortUrl) => {
 export default async function handler(req, res) {
   const allowedOrigins = [
     "https://snapth.vercel.app",
-    "https://snaptik.pics",
-    "https://www.snaptik.pics"
+    "https://snapsave.cfd",
+    "https://www.snapsave.cfd"
   ];
   const secretToken = process.env.API_SECRET_TOKEN;
   const origin = req.headers.origin || req.headers.referer || "";
