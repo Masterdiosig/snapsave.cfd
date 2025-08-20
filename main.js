@@ -1,3 +1,5 @@
+const SECRET_TOKEN = "my_super_secret_token_123";
+
 async function fetchVideo(url) {
   try {
     showLoading(true);

@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     "https://snapsave.cfd",
     "https://www.snapsave.cfd"
   ];
+
   const secretToken = process.env.API_SECRET_TOKEN;
   const origin = req.headers.origin || req.headers.referer || "";
   const authHeader = req.headers.authorization || "";
@@ -110,7 +111,7 @@ export default async function handler(req, res) {
 
     const oembed = oembedRes.data || {};
     return res.status(200).json({
-      code: 0,
+      code: 2, // ⚠️ đánh dấu fallback meta-only
       data: [],
       meta: {
         thumbnail: oembed.thumbnail_url,
@@ -127,5 +128,6 @@ export default async function handler(req, res) {
     });
   }
 }
+
 
 
