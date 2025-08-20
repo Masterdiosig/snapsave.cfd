@@ -1,38 +1,57 @@
-const SECRET_TOKEN = "my_super_secret_token_123";
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("hf_urli");
+  const submitBtn = document.getElementById("submit");
+  const resultBox = document.getElementById("result");
+  const errorMsg = document.getElementById("error-inline-msg");
 
-async function fetchVideo(url) {
-  try {
-    showLoading(true);
+  submitBtn.addEventListener("click", async () => {
+    const url = input.value.trim();
+    resultBox.innerHTML = "";
+    errorMsg.textContent = "";
 
-
-
-    const response = await fetch("/api/tiktok", {
-      method: "POST",
-      headers: {
-       'Content-Type': 'application/json',
-          'Authorization': 'Bearer my_super_secret_token_123'
-      },
-      body: JSON.stringify({ url })
-    });
-
-    const result = await response.json();
-    showLoading(false);
-
-    if (result.code === 0 && result.data.length > 0) {
-      // ✅ Có link tải
-      renderResult(result.data, result.meta);
-    } else if (result.code === 2) {
-      // ⚠️ Fallback oEmbed: chỉ hiển thị thông tin
-      renderMetaOnly(result.meta);
-    } else {
-      showError(result.message || "Không tìm thấy video!");
+    if (!url) {
+      errorMsg.textContent = "⚠️ Vui lòng nhập link TikTok!";
+      return;
     }
-  } catch (err) {
-    console.error("❌ Fetch lỗi:", err);
-    showLoading(false);
-    showError("Lỗi kết nối tới máy chủ!");
-  }
-}
+
+    try {
+      const res = await fetch("/api/tiktok", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer my_super_secret_token_123" // ✅ Token khớp .env
+        },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        errorMsg.textContent = "❌ Lỗi: " + (data.error || "Không lấy được dữ liệu");
+        return;
+      }
+
+      // ✅ Hiển thị kết quả
+      if (data.data && data.data.length > 0) {
+        data.data.forEach(item => {
+          const a = document.createElement("a");
+          a.href = `/api/download?url=${encodeURIComponent(item.url)}`;
+          a.textContent = item.label;
+          a.target = "_blank";
+          a.className = "download-btn";
+          resultBox.appendChild(a);
+        });
+      } else {
+        errorMsg.textContent = "⚠️ Không tìm thấy link tải.";
+      }
+
+    } catch (err) {
+      console.error("Lỗi fetch:", err);
+      errorMsg.textContent = "❌ Kết nối thất bại!";
+    }
+  });
+});
+
 
 // ✅ Render khi có link tải
 function renderResult(list, meta) {
