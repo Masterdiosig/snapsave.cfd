@@ -3,6 +3,9 @@ const SECRET_TOKEN = "my_super_secret_token_123";
 async function fetchVideo(url) {
   try {
     showLoading(true);
+    
+console.log("🔑 token client gửi:", token);
+console.log("🔒 token server env:", secretToken);
 
     const response = await fetch("/api/tiktok", {
       method: "POST",
