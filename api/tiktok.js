@@ -37,7 +37,9 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
   // 🔐 Token
   if (!token || token !== secretToken) {
@@ -55,7 +57,7 @@ export default async function handler(req, res) {
   const finalUrl = await followRedirect(url);
   console.log("🔗 Final TikTok URL:", finalUrl);
 
-  // --- Ưu tiên RapidAPI ---
+  // --- LAYER 1: RapidAPI ---
   try {
     const response = await axios.get(
       "https://tiktok-download-video1.p.rapidapi.com/newGetVideo",
@@ -64,8 +66,7 @@ export default async function handler(req, res) {
         headers: {
           "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
           "X-RapidAPI-Host": "tiktok-download-video1.p.rapidapi.com"
-        },
-        timeout: 8000
+        }
       }
     );
 
@@ -97,35 +98,31 @@ export default async function handler(req, res) {
         }
       });
     }
-
-    console.warn("⚠️ RapidAPI không trả về link hợp lệ, fallback oEmbed...");
   } catch (err) {
-    console.error("❌ RapidAPI lỗi:", err.message);
+    console.error("❌ RapidAPI lỗi:", err.response?.status, err.message);
   }
 
-  // --- Fallback oEmbed ---
+  // --- LAYER 2: oEmbed fallback ---
   try {
     const oembedRes = await axios.get(
-      `https://www.tiktok.com/oembed?url=${encodeURIComponent(finalUrl)}`,
-      { headers: { "User-Agent": "Mozilla/5.0" }, timeout: 5000 }
+      `https://www.tiktok.com/oembed?url=${encodeURIComponent(finalUrl)}`
     );
 
     const oembed = oembedRes.data || {};
     return res.status(200).json({
-      code: 2,
+      code: 0,
       data: [],
       meta: {
         thumbnail: oembed.thumbnail_url,
         description: oembed.title,
         author: oembed.author_name
-      },
-      message: "Chỉ lấy được thông tin, không tải video"
+      }
     });
   } catch (err) {
-    console.error("❌ Fallback oEmbed lỗi:", err.message);
+    console.error("❌ oEmbed lỗi:", err.message);
     return res.status(500).json({
       code: 500,
-      message: "Không thể lấy dữ liệu từ TikTok",
+      message: "Không lấy được dữ liệu TikTok",
       error: err.message
     });
   }
