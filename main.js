@@ -89,3 +89,12 @@ function renderMetaOnly(meta) {
     </div>
   `;
 }
+// Hamburger toggle
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+});
+
+// TODO: Thêm logic tải video TikTok
