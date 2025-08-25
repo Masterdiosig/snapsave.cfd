@@ -79,6 +79,7 @@ body {
   padding: 14px;
   border: none;
   outline: none;
+  font-size: 16px; /* Ngăn bị zoom khi nhập trên mobile */
 }
 
 .download-box button {
@@ -88,7 +89,12 @@ body {
   padding: 0 20px;
   cursor: pointer;
   transition: 0.3s;
+  font-size: 16px; /* Cho đồng bộ với input */
 }
+.download-box input:focus {
+  font-size: 16px;
+}
+
 
 .download-box button:hover {
   background: #895bff;

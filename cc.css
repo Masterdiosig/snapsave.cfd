@@ -14,7 +14,6 @@ body {
   align-items: center;
   color: #444;
   padding: 20px;
-  line-height: 1.5;
 }
 
 /* Header */
@@ -24,13 +23,11 @@ body {
   align-items: center;
   padding: 15px 20px;
   width: 100%;
-  max-width: 1100px;
 }
 
 .logo {
   color: #ff6fa5;
   font-size: 1.8rem;
-  font-weight: bold;
 }
 
 .nav-links {
@@ -82,8 +79,6 @@ body {
   padding: 14px;
   border: none;
   outline: none;
-  font-size: 16px; /* Ngăn zoom mobile */
-  color: #333;
 }
 
 .download-box button {
@@ -93,8 +88,6 @@ body {
   padding: 0 20px;
   cursor: pointer;
   transition: 0.3s;
-  font-size: 16px; /* Cho đồng bộ */
-  font-weight: 500;
 }
 
 .download-box button:hover {
@@ -105,7 +98,6 @@ body {
 .error-msg {
   margin-top: 10px;
   color: #b30000;
-  font-size: 0.95rem;
 }
 
 /* Result Buttons */
@@ -133,7 +125,6 @@ body {
 .content {
   max-width: 800px;
   margin: 20px auto;
-  text-align: center;
 }
 
 .content h2 {
@@ -143,7 +134,6 @@ body {
 
 .content p, .content li {
   line-height: 1.6;
-  font-size: 1rem;
 }
 
 /* Footer */
@@ -151,7 +141,6 @@ footer {
   margin-top: 30px;
   font-size: 0.9rem;
   color: #777;
-  text-align: center;
 }
 
 /* Responsive */
@@ -162,7 +151,7 @@ footer {
     right: 0;
     background: #fff;
     flex-direction: column;
-    width: 220px;
+    width: 200px;
     padding: 15px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: none;
@@ -174,15 +163,5 @@ footer {
 
   .hamburger {
     display: flex;
-  }
-
-  .download-box {
-    flex-direction: column;
-  }
-
-  .download-box button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 0 0 12px 12px;
   }
 }
