@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snapsave - Tải video TikTok không watermark</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header-flex">
+    <div class="logo">Snapsave</div>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#">Trang chủ</a></li>
+        <li><a href="#features">Tính năng</a></li>
+        <li><a href="#howto">Hướng dẫn</a></li>
+        <li><a href="#contact">Liên hệ</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Tải video TikTok</h1>
+    <p>Tải video TikTok không bị gắn watermark với chất lượng cao</p>
+    <div class="download-box">
+      <input type="text" placeholder="Dán link TikTok vào đây">
+      <button>Tải xuống</button>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features">
+    <div class="card">
+      <div class="icon">🎬</div>
+      <h3>Download video</h3>
+      <p>Tải video TikTok không có watermark</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎵</div>
+      <h3>Tải mp3</h3>
+      <p>Chuyển TikTok thành mp3 chất lượng cao</p>
+    </div>
+    <div class="card">
+      <div class="icon">🖼️</div>
+      <h3>Ảnh / Story</h3>
+      <p>Tải ảnh hoặc video story từ TikTok</p>
+    </div>
+  </section>
+
+  <!-- How to -->
+  <section id="howto" class="howto">
+    <h2>Cách sử dụng</h2>
+    <div class="steps">
+      <div class="step">1. Sao chép liên kết</div>
+      <div class="step">2. Dán liên kết</div>
+      <div class="step">3. Nhấn tải xuống</div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    © 2025 Snapsave.cfd – All rights reserved.
+  </footer>
+
+  <script>
+    // Toggle menu
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("navLinks");
+
+    hamburger.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      hamburger.classList.toggle("active");
+    });
+  </script>
+</body>
+</html>
